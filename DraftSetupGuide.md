@@ -148,7 +148,33 @@ You should see your blockchain explorer live!
 
 ---
 
-## 10. Create the timer unit
+## 10. Create the sync service unit
+
+File: /etc/systemd/system/eiquidus-sync.service
+
+---
+[Unit]
+Description=Eiquidus Sync Job
+After=network.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/eiquidus
+ExecStart=/usr/bin/node /root/eiquidus/scripts/sync.js index update
+StandardOutput=append:/var/log/eiquidus-sync.log // optional
+StandardError=append:/var/log/eiquidus-sync-error.log // optional
+
+Type=oneshot → runs once and exits (perfect for jobs).
+
+ExecStart → points to your sync script.
+
+WorkingDirectory → explorer root.
+
+Logs go to /var/log/eiquidus-sync.log.
+
+---
+
+## 11. Create the timer unit
 
 File: /etc/systemd/system/eiquidus-sync.timer:
 
@@ -173,14 +199,14 @@ Links to the service above.
 
 ---
 
-## Enable and start
+#### Enable and start
 
 ```
 sudo systemctl daemon-reload
 sudo systemctl enable eiquidus-sync.timer
 sudo systemctl start eiquidus-sync.timer
 ```
-Check status:
+#### Check status:
 ```
 systemctl status eiquidus-sync.timer
 systemctl list-timers | grep eiquidus-sync
@@ -194,19 +220,20 @@ sync.js runs every 2 minutes under a systemd timer.
 
 No need for cron — everything is managed consistently by systemd.
 
----
+```
 
 ## 🔧 Tips for Newcomers
 
+```
 - Always keep Node.js and npm updated.
 - Use `forever` or `pm2` to keep the explorer running.
 - If images don’t update, use ssh not password.
 - Back up your `settings.json` and branding assets before pulling new repo updates.
 
----
+```
 
 ## 🎉 Conclusion
-
+```
 You’ve set up Eiquidus Explorer from scratch using a friendly, step‑by‑step approach. Now miners and community members can host their own explorer without needing deep developer knowledge.
 
 
