@@ -148,6 +148,56 @@ You should see your blockchain explorer live!
 
 ---
 
+## 10. Access Your Explorer
+
+Create the timer unit
+
+File: /etc/systemd/system/eiquidus-sync.timer:
+
+```
+[Unit]
+Description=Run Eiquidus Sync Job every minute
+
+[Timer]
+OnBootSec=60s
+OnUnitActiveSec=120s
+Unit=eiquidus-sync.service
+
+[Install]
+WantedBy=timers.target
+```
+
+OnBootSec=60s → first run 60 seconds after boot.
+
+OnUnitActiveSec=120s → repeat every minute.
+
+Links to the service above.
+
+---
+
+## Enable and start
+
+```
+sudo systemctl daemon-reload
+sudo systemctl enable eiquidus-sync.timer
+sudo systemctl start eiquidus-sync.timer
+```
+Check status:
+```
+systemctl status eiquidus-sync.timer
+systemctl list-timers | grep eiquidus-sync
+```
+Logs:
+
+journalctl -u eiquidus-sync.service -f
+
+```
+sync.js runs every 2 minutes under a systemd timer.
+
+No need for cron — everything is managed consistently by systemd.
+
+---
+
 ## 🔧 Tips for Newcomers
 
 - Always keep Node.js and npm updated.
