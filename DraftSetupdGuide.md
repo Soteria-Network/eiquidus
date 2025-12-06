@@ -148,9 +148,7 @@ You should see your blockchain explorer live!
 
 ---
 
-## 10. Access Your Explorer
-
-Create the timer unit
+## 10. Create the timer unit
 
 File: /etc/systemd/system/eiquidus-sync.timer:
 
